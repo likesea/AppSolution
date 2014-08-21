@@ -1,0 +1,128 @@
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
+using Microsoft.Practices.Unity;
+using App.IBLL;
+using App.Common;
+using App.Models;
+using App.Models.Sys;
+using App.Admin.Core;
+namespace App.Admin.Controllers
+{
+    public class SysModuleController : BaseController
+    {
+        //
+        // GET: /SysModule/
+        [Dependency]
+        public ISysModuleBLL m_BLL { get; set; }
+        [Dependency]
+        public ISysModuleOperateBLL operateBLL { get; set; }
+        ValidationErrors errors = new ValidationErrors();
+
+        /// <summary>
+        /// 主页
+        /// </summary>
+        /// <returns>视图</returns>
+        [SupportFilter]
+        public ActionResult Index()
+        {
+            ViewBag.Perm = GetPermission();
+            return View();
+        }
+        /// <summary>
+        /// 获取列表
+        /// </summary>
+        /// <param name="pager">分页</param>
+        /// <param name="queryStr">查询条件</param>
+        /// <returns></returns>
+        [SupportFilter(ActionName="Index")]
+        [HttpPost]
+        public JsonResult GetList(string id)
+        {
+            if (id == null)
+                id = "0";
+            List<SysModuleModel> list = m_BLL.GetList(id);
+            var json = from r in list
+                       select new SysModuleModel()
+                       {
+                           Id = r.Id,
+                           Name = r.Name,
+                           EnglishName = r.EnglishName,
+                           ParentId = r.ParentId,
+                           Iconic = r.Iconic,
+                           Sort = r.Sort,
+                           Remark = r.Remark,
+                           Enable = r.Enable,
+                           CreatePerson = r.CreatePerson,
+                           CreateTime = r.CreateTime,
+                           IsLast = r.IsLast,
+                           state = (m_BLL.GetList(r.Id).Count > 0) ? "closed" : "open"
+                       };
+            return Json(json);
+        }
+
+        [HttpPost]
+        [SupportFilter(ActionName="Index")]
+        public JsonResult GetOptListByModule(GridPager pager,string mid)
+        {
+            pager.rows = 1000;
+            pager.page = 1;
+            List<SysModuleOperateModel> list = operateBLL.GetList(ref pager, mid);
+            var json = new
+            {
+                total = pager.totalRows,
+                rows = (from r in list
+                        select new SysModuleOperateModel()
+                        {
+                            Id = r.Id,
+                            Name = r.Name,
+                            KeyCode = r.KeyCode,
+                            ModuleId = r.ModuleId,
+                            IsValid = r.IsValid,
+                            Sort = r.Sort
+                        }).ToArray()
+            };
+            return Json(json);
+        }
+
+        #region 创建模块
+        [SupportFilter]
+        public ActionResult Create(string id)
+        {
+            ViewBag.Perm = GetPermission();
+            SysModuleModel entity = new SysModuleModel()
+            {
+                ParentId = id,
+                Enable = true,
+                Sort = 0
+            };
+            return View(entity);
+        }
+        [HttpPost]
+        [SupportFilter]
+        public JsonResult Create(SysModuleModel model)
+		{
+			model.Id = ResultHelper.NewId;
+			model.CreateTime = ResultHelper.NowTime;
+			model.CreatePerson = GetUserId();
+			if(model != null && ModelState.IsValid)
+			{
+				if(m_BLL.Create(ref errors,model))
+				{
+					LogHandler.WriteServiceLog(GetUserId(),"Id"+model.Id+",Name"+model.Name,"Success","Create","SysModule");
+					return Json(JsonHandler.CreateMessage(1,Suggestion.InsertSucceed));
+				}
+				else
+				{
+					string ErrorCol =errors.Error;
+					LogHandler.WriteServiceLog(GetUserId(),"Id"+model.Id+",Name"+model.Name,"Fail","Create","SysModule");
+					return Json(JsonHandler.CreateMessage(0,Suggestion.InsertFail+ErrorCol));
+				}
+			}
+			else
+			{
+				return Json(JsonHandler.CreateMessage(0,Suggestion.InsertFail));
+			}
+		}
+    }
+}
