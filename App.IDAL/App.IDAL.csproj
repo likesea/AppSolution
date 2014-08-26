@@ -50,7 +50,9 @@
     <Compile Include="ISysModuleOperateRepository.cs" />
     <Compile Include="ISysModuleRepository.cs" />
     <Compile Include="ISysRightRepository.cs" />
+    <Compile Include="ISysRoleRepository.cs" />
     <Compile Include="ISysSampleRepository.cs" />
+    <Compile Include="ISysUserRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -34,6 +34,15 @@ namespace App.Core
 
             container.RegisterType<ISysModuleOperateBLL, SysModuleOperateBLL>();
             container.RegisterType<ISysModuleOperateRepository, SysModuleOperateRepository>();
+
+            container.RegisterType<ISysRoleBLL, SysRoleBLL>();
+            container.RegisterType<ISysRoleRepository, SysRoleRepository>();
+
+            container.RegisterType<ISysRightBLL, SysRightBLL>();
+            container.RegisterType<ISysRightRepository, SysRightRepository>();
+
+            container.RegisterType<ISysUserRepository, SysUserRepository>();
+            container.RegisterType<ISysUserBLL, SysUserBLL>();
         }
     }
 }

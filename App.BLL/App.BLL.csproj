@@ -60,9 +60,13 @@
     <Compile Include="SysLogBLL.cs" />
     <Compile Include="SysModuleBLL.cs" />
     <Compile Include="SysModuleOperateBLL.cs" />
+    <Compile Include="SysRightBLL.cs" />
+    <Compile Include="SysRoleBLL.cs" />
     <Compile Include="SysSampleBLL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SysUserBLL.cs" />
+    <Compile Include="SysUserBLL.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\App.Common\App.Common.csproj">

@@ -14,7 +14,7 @@
         <EntityTypeShape EntityType="DB.SysRight" Width="1.5" PointX="3" PointY="1.5" IsExpanded="false" />
         <EntityTypeShape EntityType="DB.SysRightOperate" Width="1.75" PointX="5.375" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="DB.SysRole" Width="1.5" PointX="2.875" PointY="3.25" IsExpanded="false" />
-        <EntityTypeShape EntityType="DB.SysUser" Width="1.75" PointX="5.75" PointY="3.375" IsExpanded="false" />
+        <EntityTypeShape EntityType="DB.SysUser" Width="1.75" PointX="5.75" PointY="3.375" IsExpanded="true" />
         <AssociationConnector Association="DB.FK_SysModuleOperate_SysModule" />
         <AssociationConnector Association="DB.FK_SysRight_SysModule" />
         <AssociationConnector Association="DB.FK_SysRight_SysRole" />
